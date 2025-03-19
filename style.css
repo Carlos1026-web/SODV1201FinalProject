@@ -1,4 +1,14 @@
 .title {
     text-align: center;
-    
+    padding-top: 35vh;
+}
+
+.logInDiv {
+    text-align: center;
+    padding-top: 35vh;
+}
+
+.signUpDiv {
+    text-align: center;
+    padding-top: 30vh;
 }
