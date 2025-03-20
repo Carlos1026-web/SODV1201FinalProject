@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>    
     <link rel="stylesheet" href="style.css">
     <title>Log In</title>
 </head>
@@ -12,20 +13,20 @@
     <div class="logInDiv">
         <h1>Log In</h1>
         
-        <form action="get">
+        <form action="" id="logInForm">
             <p>Email:</p>
-            <input type="text">
+            <input type="text" id="logInUserEmail">
 
             <br>
 
             <p>Password:</p>
-            <input type="text">
+            <input type="text" id="logInPassword">
 
             <br>
 
-            <button type="submit">Log In</button>
+            <button type="submit" id="logInSubmit">Log In</button>
 
-            <p id="signUpMsg">(Text to show success/fail)</p>
+            <p id="logInMsg">(Text to show success/fail)</p>
         </form>
 
         <button id="goBack" onclick="location.href='index.html'">Back</button>
