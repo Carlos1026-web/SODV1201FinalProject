@@ -5,6 +5,8 @@ const usersArray = [];
 
 const currentUser = "";
 
+var usersCount = 0;
+
 $("#signUpForm").on("submit", function() {
     let email = document.getElementById("userEmail").value ;
     let password = document.getElementById("userPassword").value;
@@ -27,6 +29,10 @@ $("#signUpForm").on("submit", function() {
         "phone": phone,
         "role": role
     }
+
+    usersCount++;
+    sessionStorage.setItem('usersCount', usersCount);
+    sessionStorage.setItem(`user${usersCount}`, newUser);
 
     usersArray.push(newUser);
 
