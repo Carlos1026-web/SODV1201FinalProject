@@ -7,6 +7,14 @@ const currentUser = "";
 
 var usersCount = 0;
 
+function loadUserNum() {
+    if(sessionStorage.getItem("usersCount")!=null)
+        {
+            usersCount = Number(sessionStorage.getItem("counter"));
+            alert(`number of users: ${usersCount}`);
+        }
+}
+
 $("#signUpForm").on("submit", function() {
     let email = document.getElementById("userEmail").value ;
     let password = document.getElementById("userPassword").value;
@@ -14,7 +22,8 @@ $("#signUpForm").on("submit", function() {
     let phone = document.getElementById("phoneNum").value;
     let role = document.getElementById("selectRole").value;
 
-
+    sessionStorage.setItem('usersCount', usersCount);
+    sessionStorage.setItem(`user${usersCount}`, newUser);
 
     alert(`Email: ${email}
     \nPassword: ${password}
@@ -31,8 +40,6 @@ $("#signUpForm").on("submit", function() {
     }
 
     usersCount++;
-    sessionStorage.setItem('usersCount', usersCount);
-    sessionStorage.setItem(`user${usersCount}`, newUser);
 
     usersArray.push(newUser);
 
