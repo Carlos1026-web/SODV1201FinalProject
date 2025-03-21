@@ -51,11 +51,13 @@ $("#logInForm").on("submit", function() {
     let logInEmail = document.getElementById("logInUserEmail").value ;
     let logInPassword = document.getElementById("logInPassword").value;
 
-    if(usersArray.length > 0) {
+    if(usersCount > 0) {
 
-        for(let i = 0; i < usersArray.length; i++) {
-            if(logInEmail == usersArray[i].email && logInPassword == usersArray[i].password) {
+        for(let i = 0; i < usersCount; i++) {
+            let tempUser = sessionStorage.getItem(`user${i}`);
 
+            if(logInEmail == tempUser.email && logInPassword == tempUser.password) {
+                alert("Log In Successful!");
             }
             else if (logInPassword != usersArray[i].password) {    //debugging purposes ONLY
                 alert("Password is not correct!");
