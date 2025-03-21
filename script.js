@@ -1,11 +1,13 @@
 
-const propertyWorkspaceArray = [];
+var propertyWorkspaceArray = [];
 
-const usersArray = [];
+var usersArray = [];
 
-const currentUser = "";
+var currentUser = "";
 
 var usersCount = 0;
+
+var placesCount = 0;
 
 function loadUserNum() {
     if(sessionStorage.getItem("usersCount")!=0)
@@ -64,9 +66,42 @@ $("#logInForm").on("submit", function() {
             if(logInEmail == tempUser.email && logInPassword == tempUser.password) {
                 alert("Log In Successful!");
                 currentUser = tempUser.name;
+                sessionStorage.setItem('currentUserName', currentUser);
                 break;
             }
-            else if (logInPassword != usersArray[i].password) {    //debugging purposes ONLY
+            else if (logInPassword != tempUser.password) {    //debugging purposes ONLY
+                alert("Password is not correct!");
+            }
+            else {
+                alert("Incorrect Credentials");
+            }
+        }
+    }
+    else {
+        alert("No users in the database!")
+    }
+});
+
+$("#newPlaceForm").on("submit", function() {
+    let logInEmail = document.getElementById("logInUserEmail").value ;
+    let logInPassword = document.getElementById("logInPassword").value;
+
+    if(usersCount > 0) {
+
+        for(let i = -1; i < usersCount; i++) {
+            // let tempUser = sessionStorage.getItem(`user${i + 1}`);
+            let tempUser = JSON.parse(sessionStorage.getItem(`user${i + 1}`));
+            alert(`user${i + 1} is current scanning user`);
+
+            alert(`${tempUser.email}\n${tempUser.password}\n${tempUser.name}\n${tempUser.phone}\n${tempUser.role}`);
+
+            if(logInEmail == tempUser.email && logInPassword == tempUser.password) {
+                alert("Log In Successful!");
+                currentUser = tempUser.name;
+                sessionStorage.setItem('currentUserName', currentUser);
+                break;
+            }
+            else if (logInPassword != tempUser.password) {    //debugging purposes ONLY
                 alert("Password is not correct!");
             }
             else {
