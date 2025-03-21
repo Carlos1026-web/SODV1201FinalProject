@@ -36,7 +36,8 @@ $("#signUpForm").on("submit", function() {
         "role": role
     }
 
-    sessionStorage.setItem(`user${usersCount}`, newUser);
+    //sessionStorage.setItem(`user${usersCount}`, newUser);
+    sessionStorage.setItem(`user${usersCount}`, JSON.stringify(newUser));
     usersCount++;
     sessionStorage.setItem('usersCount', usersCount);
 
@@ -53,11 +54,17 @@ $("#logInForm").on("submit", function() {
 
     if(usersCount > 0) {
 
-        for(let i = 0; i < usersCount; i++) {
-            let tempUser = sessionStorage.getItem(`user${i}`);
+        for(let i = -1; i < usersCount; i++) {
+            // let tempUser = sessionStorage.getItem(`user${i + 1}`);
+            let tempUser = JSON.parse(sessionStorage.getItem(`user${i + 1}`));
+            alert(`user${i + 1} is current scanning user`);
+
+            alert(`${tempUser.email}\n${tempUser.password}\n${tempUser.name}\n${tempUser.phone}\n${tempUser.role}`);
 
             if(logInEmail == tempUser.email && logInPassword == tempUser.password) {
                 alert("Log In Successful!");
+                currentUser = tempUser.name;
+                break;
             }
             else if (logInPassword != usersArray[i].password) {    //debugging purposes ONLY
                 alert("Password is not correct!");
