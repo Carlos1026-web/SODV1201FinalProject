@@ -8,13 +8,33 @@
     <link rel="stylesheet" href="style.css">
     <title>Owner Login</title>
 </head>
-<body>
+<body onload="loadOwnerName()">
     
-    <button id="goBack" onclick="location.href='index.html'">Back</button>
+    <header class="coWorkerHeader">
+        <button id="goBack" onclick="location.href='index.html'">Back</button>
 
-    <p>owner</p>
+        <p id="ownerIntro">Hello,</p>
 
-    <p>Manage Properties/Workspaces</p>
+        <p>Properties | Manage properties</p>
+    </header>
+
+    <hr>
+
+    <div>
+        <p>Your Properties/Workspaces</p>
+
+        <p>Sort by:</p>
+        <select name="" id="filterByOwner">
+            <option value="Workspace">Workspace</option>
+            <option value="Property">Property</option>
+        </select>
+
+        <button id="filterOwnerSubmit">Filter</button>
+    </div>
+
+    <div class="tableDiv">
+
+    </div>
 
 </body>
 </html>

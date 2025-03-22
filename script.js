@@ -34,6 +34,14 @@ function loadName() {   // to be used on coworker/owner page on properties
     $(".tableDiv").append(tableString);
 }
 
+function loadOwnerName() {
+    loadUserNum() ;
+    $('#ownerIntro').text(`Hello, ${currentUser}!`);
+
+    createOwnerTable();
+    $(".tableDiv").append(tableString);
+}
+
 $("#signUpForm").on("submit", function() {
     let email = document.getElementById("userEmail").value ;
     let password = document.getElementById("userPassword").value;
@@ -310,6 +318,158 @@ $("#searchPlace").on('keyup', function (e) {
                 tableString += "<tr>";
                     tableString += `<td id="entry${i}Name" class="entry${i}">${tempPlace.name}</td>`;
                     tableString += `<td id="entry${i}Owner" class="entry${i}">${tempPlace.ownedBy}</td>`;
+                    tableString += `<td id="entry${i}PlaceType" class="entry${i}">${tempPlace.placeType}</td>`;
+                    tableString += `<td id="entry${i}Address" class="entry${i}">${tempPlace.address}</td>`;
+                    tableString += `<td id="entry${i}Neighborhood" class="entry${i}">${tempPlace.neighborhood}</td>`;
+                    tableString += `<td id="entry${i}SqFt" class="entry${i}">${tempPlace.sqft}</td>`;
+                    tableString += `<td id="entry${i}Garage" class="entry${i}">${tempPlace.garage}</td>`;
+                    tableString += `<td id="entry${i}Transit" class="entry${i}">${tempPlace.transitReachable}</td>`;
+                tableString += "</tr>";
+            }
+        }
+
+        //once everything has been recorded on the tableString, put the ending table tag to complete the element
+        tableString += "</table>";
+
+        $(".tableDiv").append(tableString);
+    }
+});
+
+function createOwnerTable () {
+    tableString= `<table class="placesList">`;
+    
+    //first row for showing the different categories
+    tableString += "<tr>";
+        tableString += "<th>Name</th>";
+        tableString += "<th>Owned By</th>";
+        tableString += "<th>Being Rented</th>";
+        tableString += "<th>Place Type</th>";
+        tableString += "<th>Address</th>";
+        tableString += "<th>Neighborhood</th>";
+        tableString += "<th>Square Feet</th>";
+        tableString += "<th>Has a garage</th>";
+        tableString += "<th>Is reachable by transit</th>";
+    tableString += "</tr>";
+
+    //loop to set up each entry and put them in their respecitve cells
+    for(let i = 0; i < placesCount; i++) {
+        tempPlace = JSON.parse(sessionStorage.getItem(`place${i}`));
+
+        if(tempPlace.ownedBy == currentUser) {
+
+            tableString += "<tr>";
+                tableString += `<td id="entry${i}Name" class="entry${i}">${tempPlace.name}</td>`;
+                tableString += `<td id="entry${i}Owner" class="entry${i}">${tempPlace.ownedBy}</td>`;
+
+                if(tempPlace.rentedBy != "") {
+                    tableString += `<td id="entry${i}BeingRented" class="entry${i}">Yes</td>`;
+                }
+                else {
+                    tableString += `<td id="entry${i}BeingRented" class="entry${i}">No</td>`;
+                }
+
+                tableString += `<td id="entry${i}PlaceType" class="entry${i}">${tempPlace.placeType}</td>`;
+                tableString += `<td id="entry${i}Address" class="entry${i}">${tempPlace.address}</td>`;
+                tableString += `<td id="entry${i}Neighborhood" class="entry${i}">${tempPlace.neighborhood}</td>`;
+                tableString += `<td id="entry${i}SqFt" class="entry${i}">${tempPlace.sqft}</td>`;
+                tableString += `<td id="entry${i}Garage" class="entry${i}">${tempPlace.garage}</td>`;
+                tableString += `<td id="entry${i}Transit" class="entry${i}">${tempPlace.transitReachable}</td>`;
+            tableString += "</tr>";
+        }
+    }
+
+    //once everything has been recorded on the tableString, put the ending table tag to complete the element
+    tableString += "</table>";
+
+    //for debug/console check to make sure everything is being written properly
+    console.log(tableString);
+}
+
+$("#filterOwnerSubmit").on("click", function() {
+    alert("test");
+    let filter = document.getElementById("filterByOwner").value;
+
+    $(".placesList").remove();
+
+    if(filter == "Property") {
+        tableString= `<table class="placesList">`;
+    
+        //first row for showing the different categories
+        tableString += "<tr>";
+            tableString += "<th>Name</th>";
+            tableString += "<th>Owned By</th>";
+            tableString += "<th>Place Type</th>";
+            tableString += "<th>Address</th>";
+            tableString += "<th>Neighborhood</th>";
+            tableString += "<th>Square Feet</th>";
+            tableString += "<th>Has a garage</th>";
+            tableString += "<th>Is reachable by transit</th>";
+        tableString += "</tr>";
+
+        //loop to set up each entry and put them in their respecitve cells
+        for(let i = 0; i < placesCount; i++) {
+            tempPlace = JSON.parse(sessionStorage.getItem(`place${i}`));
+
+            if(tempPlace.placeType == "Property" && tempPlace.ownedBy == currentUser) {
+
+                tableString += "<tr>";
+                    tableString += `<td id="entry${i}Name" class="entry${i}">${tempPlace.name}</td>`;
+                    tableString += `<td id="entry${i}Owner" class="entry${i}">${tempPlace.ownedBy}</td>`;
+    
+                    if(tempPlace.rentedBy != "") {
+                        tableString += `<td id="entry${i}BeingRented" class="entry${i}">Yes</td>`;
+                    }
+                    else {
+                        tableString += `<td id="entry${i}BeingRented" class="entry${i}">No</td>`;
+                    }
+    
+                    tableString += `<td id="entry${i}PlaceType" class="entry${i}">${tempPlace.placeType}</td>`;
+                    tableString += `<td id="entry${i}Address" class="entry${i}">${tempPlace.address}</td>`;
+                    tableString += `<td id="entry${i}Neighborhood" class="entry${i}">${tempPlace.neighborhood}</td>`;
+                    tableString += `<td id="entry${i}SqFt" class="entry${i}">${tempPlace.sqft}</td>`;
+                    tableString += `<td id="entry${i}Garage" class="entry${i}">${tempPlace.garage}</td>`;
+                    tableString += `<td id="entry${i}Transit" class="entry${i}">${tempPlace.transitReachable}</td>`;
+                tableString += "</tr>";
+            }
+        }
+
+        //once everything has been recorded on the tableString, put the ending table tag to complete the element
+        tableString += "</table>";
+
+        $(".tableDiv").append(tableString);
+    }
+    if(filter == "Workspace") {
+        tableString= `<table class="placesList">`;
+    
+        //first row for showing the different categories
+        tableString += "<tr>";
+            tableString += "<th>Name</th>";
+            tableString += "<th>Owned By</th>";
+            tableString += "<th>Place Type</th>";
+            tableString += "<th>Address</th>";
+            tableString += "<th>Neighborhood</th>";
+            tableString += "<th>Square Feet</th>";
+            tableString += "<th>Has a garage</th>";
+            tableString += "<th>Is reachable by transit</th>";
+        tableString += "</tr>";
+
+        //loop to set up each entry and put them in their respecitve cells
+        for(let i = 0; i < placesCount; i++) {
+            tempPlace = JSON.parse(sessionStorage.getItem(`place${i}`));
+
+            if(tempPlace.placeType == "Workspace" && tempPlace.ownedBy == currentUser) {
+
+                tableString += "<tr>";
+                    tableString += `<td id="entry${i}Name" class="entry${i}">${tempPlace.name}</td>`;
+                    tableString += `<td id="entry${i}Owner" class="entry${i}">${tempPlace.ownedBy}</td>`;
+    
+                    if(tempPlace.rentedBy != "") {
+                        tableString += `<td id="entry${i}BeingRented" class="entry${i}">Yes</td>`;
+                    }
+                    else {
+                        tableString += `<td id="entry${i}BeingRented" class="entry${i}">No</td>`;
+                    }
+    
                     tableString += `<td id="entry${i}PlaceType" class="entry${i}">${tempPlace.placeType}</td>`;
                     tableString += `<td id="entry${i}Address" class="entry${i}">${tempPlace.address}</td>`;
                     tableString += `<td id="entry${i}Neighborhood" class="entry${i}">${tempPlace.neighborhood}</td>`;
