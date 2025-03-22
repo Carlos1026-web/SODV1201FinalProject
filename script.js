@@ -14,6 +14,8 @@ function loadUserNum() {
     {
         usersCount = Number(sessionStorage.getItem("usersCount"));
         alert(`number of users: ${usersCount}`);
+        placesCount = Number(sessionStorage.getItem("placesCount"));
+        alert(`number of places: ${placesCount}`);
         currentUser = sessionStorage.getItem("currentUserName");
         alert(`current user: ${currentUser}`);
     }
@@ -116,6 +118,7 @@ $("#newPlaceForm").on("submit", function() {
     );
 
     let newPlace = {
+        "name": name,
         "ownedBy": currentUser,
         "rentedBy": "",
         "address": address,
@@ -159,8 +162,8 @@ function createTable () {
     tableString += "</tr>";
 
     //loop to set up each entry and put them in their respecitve cells
-    for(let i = -1; i < placesCount; i++) {
-        tempPlace = JSON.parse(sessionStorage.getItem(`place${i + 1}`));
+    for(let i = 0; i < placesCount; i++) {
+        tempPlace = JSON.parse(sessionStorage.getItem(`place${i}`));
 
         tableString += "<tr>";
             tableString += `<td id="entry${i}Name" class="entry${i}">${tempPlace.name}</td>`;
