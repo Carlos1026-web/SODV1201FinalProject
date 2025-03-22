@@ -14,11 +14,13 @@ function loadUserNum() {
     {
         usersCount = Number(sessionStorage.getItem("usersCount"));
         alert(`number of users: ${usersCount}`);
+        currentUser = sessionStorage.getItem("currentUserName");
+        alert(`current user: ${currentUser}`);
     }
     
     if(currentUser.getItem("currentUserName")!="") {
-        currentUser = sessionStorage.getItem("currentUserName");
-        alert(`current user: ${currentUser}`);
+        // currentUser = sessionStorage.getItem("currentUserName");
+        // alert(`current user: ${currentUser}`);
     }
 }
 
