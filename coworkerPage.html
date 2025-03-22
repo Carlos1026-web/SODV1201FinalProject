@@ -4,16 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="script.js" defer></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>    
     <link rel="stylesheet" href="style.css">
     <title>Coworker Login</title>
 </head>
-<body>
+<body onload="loadName()">
     
-    <button id="goBack" onclick="location.href='index.html'">Back</button>
+    <header class="coWorkerHeader">
+        <button id="goBack" onclick="location.href='index.html'">Back</button>
 
-    <p>Coworker</p>
+        <p id="coWorkerIntro">Hello,</p>
 
-    <p>Properties | Add property</p>
+        <p>Properties | Manage properties</p>
+    </header>
+
+    <hr>
 
     <p>Available Properties</p>
 

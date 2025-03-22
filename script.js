@@ -18,10 +18,15 @@ function loadUserNum() {
         alert(`current user: ${currentUser}`);
     }
     
-    if(currentUser.getItem("currentUserName")!="") {
-        // currentUser = sessionStorage.getItem("currentUserName");
-        // alert(`current user: ${currentUser}`);
-    }
+    // if(currentUser.getItem("currentUserName")!="") {
+    //     // currentUser = sessionStorage.getItem("currentUserName");
+    //     // alert(`current user: ${currentUser}`);
+    // }
+}
+
+function loadName() {   // to be used on coworker/owner page on properties
+    loadUserNum() ;
+    $('#coWorkerIntro').text(`Hello, ${currentUser}!`);
 }
 
 $("#signUpForm").on("submit", function() {
