@@ -109,7 +109,7 @@ $("#newPlaceForm").on("submit", function() {
 
     let newPlace = {
         "ownedBy": currentUser,
-        "name": email,
+        "rentedBy": "",
         "address": address,
         "neighborhood": neighborhood,
         "sqft": sqft,
@@ -125,7 +125,7 @@ $("#newPlaceForm").on("submit", function() {
 
     // usersArray.push(newUser);
 
-    alert(`${newPlace.name}\n${newPlace.address}\n${newPlace.neighborhood}\n${newPlace.sqft}\n${newPlace.garage}\n${newPlace.transitReachable}\n${newPlace.placeType}`);
+    alert(`${newPlace.ownedBy}\n${newPlace.address}\n${newPlace.neighborhood}\n${newPlace.sqft}\n${newPlace.garage}\n${newPlace.transitReachable}\n${newPlace.placeType}`);
 
     $("#signUpMsg").html("Sign Up Success!");
 });
