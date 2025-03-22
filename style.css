@@ -20,3 +20,11 @@
 table {
     text-align: center;
 }
+
+th {
+    padding: 10px;
+}
+
+td {
+    padding: 10px;
+}
