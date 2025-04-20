@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="script.js" defer></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>    
+    <link rel="stylesheet" href="style.css">
+    <title>Create New Workspace</title>
+</head>
+<body onload="loadUserNum()">
+
+    <div class="newWorkspaceDiv">
+        <h1>Create a Workspace</h1>
+        
+        <form action="" id="newWorkspaceForm">
+            <p>Name of Workspace:</p>
+            <input type="text" id="WorkspaceName">
+
+            <br>
+
+            <p>Meeting Room:</p>
+            <select name="" id="placeMeetingRoom">
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <br>
+
+            <p>Private Office:</p>
+            <select name="" id="placePrivateOffice">
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <br>
+
+            <p>Open Desk:</p>
+            <select name="" id="placeOpenDesk">
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <br>
+
+            <p>Seats/Capacity:</p>
+            <input type="text" id="placeCapacity">
+
+            <br>
+
+            <p>Smoking Allowed?</p>
+            <select name="" id="placeSmoking">
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <br>
+
+            <p>Availability:</p>
+            <select name="" id="placeAvailability">
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <p>Renting Term:</p>
+            <select name="" id="placeRentTerm">
+                <option value="Day">Day</option>
+                <option value="Week">Week</option>
+                <option value="Month">Month</option>
+            </select>
+
+            <br>
+
+            <p>Price per Term:</p>
+            <input type="text" id="placePrice">
+
+            <br><br>
+
+            <button type="submit" id="newPropertySubmit">Create New Place</button>
+
+            <p>(Text to show success/fail)</p>
+        </form>
+
+        <button id="goBack" onclick="location.href='index.html'">Back</button>
+
+</body>
+</html>

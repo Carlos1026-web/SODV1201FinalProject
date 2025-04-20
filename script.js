@@ -9,6 +9,8 @@ var usersCount = 0;
 
 var placesCount = 0;
 
+var debug = 1 ;
+
 function loadUserNum() {
     if(sessionStorage.getItem("usersCount")!=0)
     {
@@ -130,8 +132,8 @@ $("#logInForm").on("submit", function() {
     }
 });
 
-$("#newPlaceForm").on("submit", function() {
-    let name = document.getElementById("placeName").value ;
+$("#newPropertyForm").on("submit", function() {
+    let name = document.getElementById("propertyName").value ;
     let address = document.getElementById("placeAddress").value;
     let neighborhood = document.getElementById("placeNeighborhood").value;
     let sqft = document.getElementById("placeSquareFeet").value;
@@ -171,6 +173,8 @@ $("#newPlaceForm").on("submit", function() {
 
     $("#signUpMsg").html("Sign Up Success!");
 });
+
+//create function for new workspace here
 
 var tableString = "" ;
 
