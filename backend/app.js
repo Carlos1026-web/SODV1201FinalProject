@@ -29,9 +29,9 @@ async function runQueries() {
         
         // await deleteProperty(client);
 
-        await deleteWorkspace(client);
+        // await deleteWorkspace(client);
 
-        // await deleteUser(client);
+        await deleteUser(client);
 
         // await showUsers(client);
 

@@ -27,6 +27,20 @@ function loadUserNum() {
 }
 
 function loadName() {   // to be used on coworker/owner page on properties
+    if (!(sessionStorage['user0'])) {
+        alert("You are not logged in.");
+        location.href = 'index.html';
+    }
+
+    // let tempUser = JSON.parse(sessionStorage.getItem(`user${1}`));
+    let tempUser = JSON.parse(sessionStorage.getItem(`user0`));
+    let role = tempUser.role;
+
+    if(role != 'Coworker' || role == null) {
+        alert("User is not a Coworker or is not logged in");
+        location.href = 'index.html';
+    }
+
     loadUserNum() ;
     $('#coWorkerIntro').text(`Hello, ${currentUser}!`);
 
@@ -35,6 +49,15 @@ function loadName() {   // to be used on coworker/owner page on properties
 }
 
 function loadOwnerName() {
+    // let tempUser = JSON.parse(sessionStorage.getItem(`user${1}`));
+    let tempUser = JSON.parse(sessionStorage.getItem(`user0`));
+    let role = tempUser.role;
+
+    if(role != 'Owner' || role == null) {
+        alert("User is not a Owner or is not logged in");
+        location.href = 'index.html';
+    }
+
     loadUserNum() ;
     $('#ownerIntro').text(`Hello, ${currentUser}!`);
 
