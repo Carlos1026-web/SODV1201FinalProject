@@ -33,6 +33,11 @@ function loadUserNum() {
         alert(`property Count:  ${sessionStorage.getItem('propertyCount')}`);
         propertyCount = sessionStorage.getItem('propertyCount');
     }
+
+    if (sessionStorage['workspaceCount']) {
+        alert(`workspace Count:  ${sessionStorage.getItem('workspaceCount')}`);
+        workspaceCount = sessionStorage.getItem('workspaceCount');
+    }
 }
 
 function loadName() {   // to be used on coworker/owner page on properties
@@ -78,6 +83,8 @@ function loadOwnerName() {
     createOwnerTable();
     $(".tableDiv").append(tableString);
 }
+
+//===========================================================================
 
 $("#signUpForm").on("submit", function() {
     let email = document.getElementById("userEmail").value ;
@@ -193,6 +200,60 @@ $("#newPropertyForm").on("submit", function() {
 });
 
 //create function for new workspace here
+$("#newWorkspaceForm").on("submit", function() {
+    if (sessionStorage['workspaceCount']) {
+        alert(`workspace Count:  ${sessionStorage.getItem('workspaceCount')}`);
+    }
+                
+    let name = document.getElementById("WorkspaceName").value ;
+    let meetingRoom = document.getElementById("placeMeetingRoom").value;
+    let privateOffice = document.getElementById("placePrivateOffice").value;
+    let openDesk = document.getElementById("placeOpenDesk").value;
+    let capacity = document.getElementById("placeCapacity").value;
+    let smoking = document.getElementById("placeSmoking").value;
+    let availability = document.getElementById("placeAvailability").value;
+    let rentTerm = document.getElementById("placeRentTerm").value;
+    let termPrice = document.getElementById("placePrice").value;
+
+    alert(`name: ${name}
+    \nOwned By: ${sessionStorage.getItem('currentUserName')}
+    \nmeetingRoom ${meetingRoom}
+    \nprivateOffice: ${privateOffice}
+    \nopenDesk: ${openDesk}
+    \ncapacity: ${capacity}
+    \nsmoking: ${smoking}
+    \navailability: ${availability}
+    \nrentTerm: ${rentTerm}
+    \ntermPrice: ${termPrice}`
+    );
+
+    let newWorkspace = {
+        "name": name,
+        "ownedBy": sessionStorage.getItem('currentUserName'),
+        "rentedBy": '',
+        "meetingRoom": meetingRoom,
+        "privateOffice": privateOffice,
+        "openDesk": openDesk,
+        "capacity": capacity,
+        "smoking": smoking,
+        "availability": availability,
+        "rentTerm": rentTerm,
+        "termPrice": termPrice
+    }
+
+    //sessionStorage.setItem(`user${usersCount}`, newUser);
+    sessionStorage.setItem(`workspace${workspaceCount}`, JSON.stringify(newWorkspace));
+    workspaceCount++;
+    sessionStorage.setItem('workspaceCount', workspaceCount);
+
+    // usersArray.push(newUser);
+
+    alert(`${newProperty.ownedBy}\n${newProperty.address}\n${newProperty.neighborhood}\n${newProperty.sqft}\n${newProperty.garage}\n${newProperty.transitReachable}`);
+
+    $("#signUpMsg").html("Sign Up Success!");
+});
+
+//===========================================================================
 
 var tableString = "" ;
 
