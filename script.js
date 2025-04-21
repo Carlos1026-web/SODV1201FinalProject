@@ -7,7 +7,9 @@ var currentUser = "";
 
 var usersCount = 0;
 
-var placesCount = 0;
+var propertyCount = 0;
+
+var workspaceCount = 0;
 
 var debug = 1 ;
 
@@ -26,6 +28,11 @@ function loadUserNum() {
     //     // currentUser = sessionStorage.getItem("currentUserName");
     //     // alert(`current user: ${currentUser}`);
     // }
+
+    if (sessionStorage['propertyCount']) {
+        alert(`property Count:  ${sessionStorage.getItem('propertyCount')}`);
+        propertyCount = sessionStorage.getItem('propertyCount');
+    }
 }
 
 function loadName() {   // to be used on coworker/owner page on properties
@@ -51,6 +58,11 @@ function loadName() {   // to be used on coworker/owner page on properties
 }
 
 function loadOwnerName() {
+    if (!(sessionStorage['user0'])) {
+        alert("You are not logged in.");
+        location.href = 'index.html';
+    }
+
     // let tempUser = JSON.parse(sessionStorage.getItem(`user${1}`));
     let tempUser = JSON.parse(sessionStorage.getItem(`user0`));
     let role = tempUser.role;
@@ -117,6 +129,10 @@ $("#logInForm").on("submit", function() {
                 alert("Log In Successful!");
                 currentUser = tempUser.name;
                 sessionStorage.setItem('currentUserName', currentUser);
+
+                // var currRole = tempUser.role
+
+                sessionStorage.setItem('currentRole', tempUser.role)
                 break;
             }
             else if (logInPassword != tempUser.password) {    //debugging purposes ONLY
@@ -133,43 +149,45 @@ $("#logInForm").on("submit", function() {
 });
 
 $("#newPropertyForm").on("submit", function() {
+    if (sessionStorage['propertyCount']) {
+        alert(`property Count:  ${sessionStorage.getItem('propertyCount')}`);
+    }
+                
     let name = document.getElementById("propertyName").value ;
     let address = document.getElementById("placeAddress").value;
     let neighborhood = document.getElementById("placeNeighborhood").value;
     let sqft = document.getElementById("placeSquareFeet").value;
     let garage = document.getElementById("placeGarage").value;
     let transitReachable = document.getElementById("placeReachablePublicTransit").value;
-    let placeType = document.getElementById("placeType").value;
 
     alert(`name: ${name}
+    \nOwned By: ${sessionStorage.getItem('currentUserName')}
     \naddress: ${address}
     \nneighborhood: ${neighborhood}
     \nsqft: ${sqft}
     \ngarage: ${garage}
-    \ntransitReachable: ${transitReachable}
-    \nplaceType: ${placeType}`
+    \ntransitReachable: ${transitReachable}`
     );
 
-    let newPlace = {
+    let newProperty = {
         "name": name,
-        "ownedBy": currentUser,
-        "rentedBy": "",
+        "ownedBy": sessionStorage.getItem('currentUserName'),
+        "rentedBy": '',
         "address": address,
         "neighborhood": neighborhood,
         "sqft": sqft,
         "garage": garage,
-        "transitReachable": transitReachable,
-        "placeType": placeType
+        "transitReachable": transitReachable
     }
 
     //sessionStorage.setItem(`user${usersCount}`, newUser);
-    sessionStorage.setItem(`place${placesCount}`, JSON.stringify(newPlace));
-    placesCount++;
-    sessionStorage.setItem('placesCount', placesCount);
+    sessionStorage.setItem(`property${propertyCount}`, JSON.stringify(newProperty));
+    propertyCount++;
+    sessionStorage.setItem('propertyCount', propertyCount);
 
     // usersArray.push(newUser);
 
-    alert(`${newPlace.ownedBy}\n${newPlace.address}\n${newPlace.neighborhood}\n${newPlace.sqft}\n${newPlace.garage}\n${newPlace.transitReachable}\n${newPlace.placeType}`);
+    alert(`${newProperty.ownedBy}\n${newProperty.address}\n${newProperty.neighborhood}\n${newProperty.sqft}\n${newProperty.garage}\n${newProperty.transitReachable}`);
 
     $("#signUpMsg").html("Sign Up Success!");
 });
