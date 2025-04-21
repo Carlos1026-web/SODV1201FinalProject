@@ -44,28 +44,16 @@ function loadUserNum() {
 
 function loadName() {   // to be used on coworker/owner page on properties
     checkIfCoworker();
-    // let tempUser = JSON.parse(sessionStorage.getItem(`user${1}`));
-    //let tempUser = JSON.parse(sessionStorage.getItem(`user0`));
-    // let role = tempUser.role;
-
-    // if(role != 'Coworker' || role == null) {
-    //     alert("User is not a Coworker or is not logged in");
-    //     location.href = 'index.html';
-    // }
-
+    
     loadUserNum() ;
     $('#coWorkerIntro').text(`Hello, ${currentUser}!`);
 
-    createTable();
-    $(".tableDiv").append(tableString);
+    createPropertyTable();
+    $(".tableDiv").append(propertyTableString);
 }
 
 function loadOwnerName() {
     checkIfOwner();
-
-    // let tempUser = JSON.parse(sessionStorage.getItem(`user${1}`));
-    // let tempUser = JSON.parse(sessionStorage.getItem(`user0`));
-    // let role = tempUser.role;
 
     loadUserNum() ;
     $('#ownerIntro').text(`Hello, ${currentUser}!`);
@@ -120,7 +108,7 @@ function checkIfOwner() {
                 alert("User is not a Owner or is not logged in");
                 location.href = 'index.html';
             }
-            
+
             break;
         }
     }
@@ -297,44 +285,60 @@ $("#newWorkspaceForm").on("submit", function() {
 
 //===========================================================================
 
-var tableString = "" ;
+var propertyTableString = "" ;
 
-function createTable () {
-    tableString= `<table class="placesList">`;
+function createPropertyTable () {
+    propertyCount = sessionStorage.getItem('propertyCount');
+    userCount = sessionStorage.getItem('usersCount');
+
+    propertyTableString= `<table class="propertiesList">`;
     
     //first row for showing the different categories
-    tableString += "<tr>";
-        tableString += "<th>Name</th>";
-        tableString += "<th>Owned By</th>";
-        tableString += "<th>Place Type</th>";
-        tableString += "<th>Address</th>";
-        tableString += "<th>Neighborhood</th>";
-        tableString += "<th>Square Feet</th>";
-        tableString += "<th>Has a garage</th>";
-        tableString += "<th>Is reachable by transit</th>";
-    tableString += "</tr>";
+    propertyTableString += "<tr>";
+        propertyTableString += "<th>Name</th>";
+        propertyTableString += "<th>Owned By</th>";
+        propertyTableString += "<th>Owner Email</th>";
+        propertyTableString += "<th>Owner Phone</th>";
+        propertyTableString += "<th>Address</th>";
+        propertyTableString += "<th>Neighborhood</th>";
+        propertyTableString += "<th>Square Feet</th>";
+        propertyTableString += "<th>Has a garage</th>";
+        propertyTableString += "<th>Is reachable by transit</th>";
+    propertyTableString += "</tr>";
 
     //loop to set up each entry and put them in their respecitve cells
-    for(let i = 0; i < placesCount; i++) {
-        tempPlace = JSON.parse(sessionStorage.getItem(`place${i}`));
+    for(let i = 0; i < propertyCount; i++) {
+        tempProperty = JSON.parse(sessionStorage.getItem(`property${i}`));
 
-        tableString += "<tr>";
-            tableString += `<td id="entry${i}Name" class="entry${i}">${tempPlace.name}</td>`;
-            tableString += `<td id="entry${i}Owner" class="entry${i}">${tempPlace.ownedBy}</td>`;
-            tableString += `<td id="entry${i}PlaceType" class="entry${i}">${tempPlace.placeType}</td>`;
-            tableString += `<td id="entry${i}Address" class="entry${i}">${tempPlace.address}</td>`;
-            tableString += `<td id="entry${i}Neighborhood" class="entry${i}">${tempPlace.neighborhood}</td>`;
-            tableString += `<td id="entry${i}SqFt" class="entry${i}">${tempPlace.sqft}</td>`;
-            tableString += `<td id="entry${i}Garage" class="entry${i}">${tempPlace.garage}</td>`;
-            tableString += `<td id="entry${i}Transit" class="entry${i}">${tempPlace.transitReachable}</td>`;
-        tableString += "</tr>";
+        propertyTableString += "<tr>";
+            propertyTableString += `<td id="entry${i}Name" class="entry${i}">${tempProperty.name}</td>`;
+
+            for(let j = 0; j < userCount; j++) {
+                let tempUser = JSON.parse(sessionStorage.getItem(`user${j}`));
+
+                if(tempProperty.ownedBy == tempUser.name) {
+                    propertyTableString += `<td id="property${i}Owner" class="property${i}">${tempProperty.ownedBy}</td>`;
+                    propertyTableString += `<td id="property${i}OwnerEmail" class="property${i}">${tempUser.email}</td>`;
+                    propertyTableString += `<td id="property${i}OwnerPhone" class="property${i}">${tempUser.phone}</td>`;
+                    break;
+                }
+                break
+            }
+
+            // propertyTableString += `<td id="property${i}Owner" class="property${i}">${tempProperty.ownedBy}</td>`;
+            propertyTableString += `<td id="property${i}Address" class="property${i}">${tempProperty.address}</td>`;
+            propertyTableString += `<td id="property${i}Neighborhood" class="property${i}">${tempProperty.neighborhood}</td>`;
+            propertyTableString += `<td id="property${i}SqFt" class="property${i}">${tempProperty.sqft}</td>`;
+            propertyTableString += `<td id="property${i}Garage" class="property${i}">${tempProperty.garage}</td>`;
+            propertyTableString += `<td id="property${i}Transit" class="property${i}">${tempProperty.transitReachable}</td>`;
+        propertyTableString += "</tr>";
     }
 
     //once everything has been recorded on the tableString, put the ending table tag to complete the element
-    tableString += "</table>";
+    propertyTableString += "</table>";
 
     //for debug/console check to make sure everything is being written properly
-    console.log(tableString);
+    console.log(propertyTableString);
 }
 
 function restartTable () {
@@ -346,8 +350,8 @@ function restartTable () {
         $(".placesList").remove();
 
         //then it will be called back
-        createTable();
-        $(".tableDiv").append(tableString);
+        createPropertyTable();
+        $(".tableDiv").append(propertyTableString);
         $(".placesList").css("display", "none");
 
         $(".placesList").fadeIn();
@@ -442,44 +446,58 @@ $("#searchPlace").on('keyup', function (e) {
     if (e.key === 'Enter' || e.keyCode === 13) {
         let search = document.getElementById("searchPlace").value ;
 
-        $(".placesList").remove();
+        $(".propertiesList").remove();
 
-        tableString= `<table class="placesList">`;
+    propertyCount = sessionStorage.getItem('propertyCount');
+    userCount = sessionStorage.getItem('usersCount');
+
+    propertyTableString= `<table class="propertiesList">`;
     
-        //first row for showing the different categories
-        tableString += "<tr>";
-            tableString += "<th>Name</th>";
-            tableString += "<th>Owned By</th>";
-            tableString += "<th>Place Type</th>";
-            tableString += "<th>Address</th>";
-            tableString += "<th>Neighborhood</th>";
-            tableString += "<th>Square Feet</th>";
-            tableString += "<th>Has a garage</th>";
-            tableString += "<th>Is reachable by transit</th>";
-        tableString += "</tr>";
+    //first row for showing the different categories
+    propertyTableString += "<tr>";
+        propertyTableString += "<th>Name</th>";
+        propertyTableString += "<th>Owned By</th>";
+        propertyTableString += "<th>Owner Email</th>";
+        propertyTableString += "<th>Owner Phone</th>";
+        propertyTableString += "<th>Address</th>";
+        propertyTableString += "<th>Neighborhood</th>";
+        propertyTableString += "<th>Square Feet</th>";
+        propertyTableString += "<th>Has a garage</th>";
+        propertyTableString += "<th>Is reachable by transit</th>";
+    propertyTableString += "</tr>";
 
         //loop to set up each entry and put them in their respecitve cells
-        for(let i = 0; i < placesCount; i++) {
-            tempPlace = JSON.parse(sessionStorage.getItem(`place${i}`));
+        for(let i = 0; i < propertyCount; i++) {
+            tempProperty = JSON.parse(sessionStorage.getItem(`property${i}`));
 
-            if(tempPlace.name == search) {
-                tableString += "<tr>";
-                    tableString += `<td id="entry${i}Name" class="entry${i}">${tempPlace.name}</td>`;
-                    tableString += `<td id="entry${i}Owner" class="entry${i}">${tempPlace.ownedBy}</td>`;
-                    tableString += `<td id="entry${i}PlaceType" class="entry${i}">${tempPlace.placeType}</td>`;
-                    tableString += `<td id="entry${i}Address" class="entry${i}">${tempPlace.address}</td>`;
-                    tableString += `<td id="entry${i}Neighborhood" class="entry${i}">${tempPlace.neighborhood}</td>`;
-                    tableString += `<td id="entry${i}SqFt" class="entry${i}">${tempPlace.sqft}</td>`;
-                    tableString += `<td id="entry${i}Garage" class="entry${i}">${tempPlace.garage}</td>`;
-                    tableString += `<td id="entry${i}Transit" class="entry${i}">${tempPlace.transitReachable}</td>`;
-                tableString += "</tr>";
+            if(tempProperty.name == search) {
+                propertyTableString += "<tr>";
+                    propertyTableString += `<td id="entry${i}Name" class="entry${i}">${tempProperty.name}</td>`;
+
+                for(let j = 0; j < userCount; j++) {
+                    let tempUser = JSON.parse(sessionStorage.getItem(`user${j}`));
+
+                    if(tempProperty.ownedBy == tempUser.name) {
+                        propertyTableString += `<td id="property${i}Owner" class="property${i}">${tempProperty.ownedBy}</td>`;
+                        propertyTableString += `<td id="property${i}OwnerEmail" class="property${i}">${tempUser.email}</td>`;
+                        propertyTableString += `<td id="property${i}OwnerPhone" class="property${i}">${tempUser.phone}</td>`;
+                        break;
+                    }
+                    // break
+                }
+                    propertyTableString += `<td id="property${i}Address" class="property${i}">${tempProperty.address}</td>`;
+                    propertyTableString += `<td id="property${i}Neighborhood" class="property${i}">${tempProperty.neighborhood}</td>`;
+                    propertyTableString += `<td id="property${i}SqFt" class="property${i}">${tempProperty.sqft}</td>`;
+                    propertyTableString += `<td id="property${i}Garage" class="property${i}">${tempProperty.garage}</td>`;
+                    propertyTableString += `<td id="property${i}Transit" class="property${i}">${tempProperty.transitReachable}</td>`;
+                propertyTableString += "</tr>";
             }
         }
 
         //once everything has been recorded on the tableString, put the ending table tag to complete the element
-        tableString += "</table>";
+        propertyTableString += "</table>";
 
-        $(".tableDiv").append(tableString);
+        $(".tableDiv").append(propertyTableString);
     }
 });
 
