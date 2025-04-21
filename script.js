@@ -11,6 +11,10 @@ var propertyCount = 0;
 
 var workspaceCount = 0;
 
+var propertyTableString = "" ;
+
+var workspaceTableString = "" ;
+
 var role = "";
 
 var debug = 1 ;
@@ -49,7 +53,10 @@ function loadName() {   // to be used on coworker/owner page on properties
     $('#coWorkerIntro').text(`Hello, ${currentUser}!`);
 
     createPropertyTable();
-    $(".tableDiv").append(propertyTableString);
+    $(".propertyTableDiv").append(propertyTableString);
+
+    createWorkspaceTable();
+    $(".workspaceTableDiv").append(workspaceTableString);
 }
 
 function loadOwnerName() {
@@ -59,7 +66,7 @@ function loadOwnerName() {
     $('#ownerIntro').text(`Hello, ${currentUser}!`);
 
     createOwnerTable();
-    $(".tableDiv").append(tableString);
+    $(".propertyTableDiv").append(tableString);
 }
 
 function checkIfCoworker() {
@@ -137,6 +144,10 @@ $("#signUpForm").on("submit", function() {
         "role": role
     }
 
+    if (sessionStorage['usersCount']) {
+        usersCount = sessionStorage.getItem('usersCount');
+    }
+
     //sessionStorage.setItem(`user${usersCount}`, newUser);
     sessionStorage.setItem(`user${usersCount}`, JSON.stringify(newUser));
     usersCount++;
@@ -152,6 +163,8 @@ $("#signUpForm").on("submit", function() {
 $("#logInForm").on("submit", function() {
     let logInEmail = document.getElementById("logInUserEmail").value ;
     let logInPassword = document.getElementById("logInPassword").value;
+
+    usersCount = sessionStorage.getItem('usersCount');
 
     if(usersCount > 0) {
 
@@ -217,6 +230,10 @@ $("#newPropertyForm").on("submit", function() {
         "transitReachable": transitReachable
     }
 
+    if (sessionStorage['propertyCount']) {
+        propertyCount = sessionStorage.getItem('propertyCount');
+    }
+
     //sessionStorage.setItem(`user${usersCount}`, newUser);
     sessionStorage.setItem(`property${propertyCount}`, JSON.stringify(newProperty));
     propertyCount++;
@@ -258,7 +275,7 @@ $("#newWorkspaceForm").on("submit", function() {
     );
 
     let newWorkspace = {
-        "name": name,
+        "wName": name,
         "ownedBy": sessionStorage.getItem('currentUserName'),
         "rentedBy": '',
         "meetingRoom": meetingRoom,
@@ -269,6 +286,10 @@ $("#newWorkspaceForm").on("submit", function() {
         "availability": availability,
         "rentTerm": rentTerm,
         "termPrice": termPrice
+    }
+
+    if (sessionStorage['workspaceCount']) {
+        workspaceCount = sessionStorage.getItem('workspaceCount');
     }
 
     //sessionStorage.setItem(`user${usersCount}`, newUser);
@@ -284,8 +305,6 @@ $("#newWorkspaceForm").on("submit", function() {
 });
 
 //===========================================================================
-
-var propertyTableString = "" ;
 
 function createPropertyTable () {
     propertyCount = sessionStorage.getItem('propertyCount');
@@ -322,7 +341,7 @@ function createPropertyTable () {
                     propertyTableString += `<td id="property${i}OwnerPhone" class="property${i}">${tempUser.phone}</td>`;
                     break;
                 }
-                break
+                // break
             }
 
             // propertyTableString += `<td id="property${i}Owner" class="property${i}">${tempProperty.ownedBy}</td>`;
@@ -341,6 +360,66 @@ function createPropertyTable () {
     console.log(propertyTableString);
 }
 
+function createWorkspaceTable () {
+    workspaceCount = sessionStorage.getItem('workspaceCount');
+    userCount = sessionStorage.getItem('usersCount');
+
+    workspaceTableString = `<table class="propertiesList">`;
+    
+    //first row for showing the different categories
+    workspaceTableString += "<tr>";
+        workspaceTableString += "<th>Name</th>";
+        workspaceTableString += "<th>Owned By</th>";
+        workspaceTableString += "<th>Owner Email</th>";
+        workspaceTableString += "<th>Owner Phone</th>";
+        workspaceTableString += "<th>Availability</th>";
+        workspaceTableString += "<th>Rent Term (D/W/M)</th>";
+        workspaceTableString += "<th>Term Price</th>";
+        workspaceTableString += "<th>Capacity</th>";
+        workspaceTableString += "<th>Meeting Room</th>";
+        workspaceTableString += "<th>Open Desk</th>";
+        workspaceTableString += "<th>Private Office</th>";
+        workspaceTableString += "<th>Smoking Allowed</th>";
+    workspaceTableString += "</tr>";
+
+    //loop to set up each entry and put them in their respecitve cells
+    for(let i = 0; i < propertyCount; i++) {
+        let tempWorkspace = JSON.parse(sessionStorage.getItem(`workspace${i}`));
+        let workspaceName = tempWorkspace.wName;
+
+        workspaceTableString += "<tr>";
+            workspaceTableString += `<td id="workspace${i}Name" class="workspace${i}">${workspaceName}</td>`;
+
+            for(let j = 0; j < userCount; j++) {
+                let tempUser = JSON.parse(sessionStorage.getItem(`user${j}`));
+
+                if(tempWorkspace.ownedBy == tempUser.name) {
+                    workspaceTableString += `<td id="workspace${i}Owner" class="workspace${i}">${tempWorkspace.ownedBy}</td>`;
+                    workspaceTableString += `<td id="workspace${i}OwnerEmail" class="workspace${i}">${tempUser.email}</td>`;
+                    workspaceTableString += `<td id="workspace${i}OwnerPhone" class="workspace${i}">${tempUser.phone}</td>`;
+                    break;
+                }
+                // break
+            }
+
+            workspaceTableString += `<td id="workspace${i}availability" class="workspace${i}">${tempWorkspace.availability}</td>`;
+            workspaceTableString += `<td id="workspace${i}rentTerm" class="workspace${i}">${tempWorkspace.rentTerm}</td>`;
+            workspaceTableString += `<td id="workspace${i}rentPrice" class="workspace${i}">${tempWorkspace.termPrice}</td>`;
+            workspaceTableString += `<td id="workspace${i}capacity" class="workspace${i}">${tempWorkspace.capacity}</td>`;
+            workspaceTableString += `<td id="workspace${i}meetingRoom" class="workspace${i}">${tempWorkspace.meetingRoom}</td>`;
+            workspaceTableString += `<td id="workspace${i}openDesk" class="workspace${i}">${tempWorkspace.openDesk}</td>`;
+            workspaceTableString += `<td id="workspace${i}privateOffice" class="workspace${i}">${tempWorkspace.privateOffice}</td>`;
+            workspaceTableString += `<td id="workspace${i}smoking" class="workspace${i}">${tempWorkspace.smoking}</td>`;
+        workspaceTableString += "</tr>";
+    }
+
+    //once everything has been recorded on the tableString, put the ending table tag to complete the element
+    workspaceTableString += "</table>";
+
+    //for debug/console check to make sure everything is being written properly
+    console.log(workspaceTableString);
+}
+
 function restartTable () {
     //table will be fade out first
     $(".placesList").fadeOut();
@@ -351,7 +430,7 @@ function restartTable () {
 
         //then it will be called back
         createPropertyTable();
-        $(".tableDiv").append(propertyTableString);
+        $(".propertyTableDiv").append(propertyTableString);
         $(".placesList").css("display", "none");
 
         $(".placesList").fadeIn();
@@ -400,7 +479,7 @@ $("#filterSubmit").on("click", function() {
         //once everything has been recorded on the tableString, put the ending table tag to complete the element
         tableString += "</table>";
 
-        $(".tableDiv").append(tableString);
+        $(".propertyTableDiv").append(tableString);
     }
     if(filter == "Workspace") {
         tableString= `<table class="placesList">`;
@@ -438,13 +517,13 @@ $("#filterSubmit").on("click", function() {
         //once everything has been recorded on the tableString, put the ending table tag to complete the element
         tableString += "</table>";
 
-        $(".tableDiv").append(tableString);
+        $(".propertyTableDiv").append(tableString);
     }
 });
 
-$("#searchPlace").on('keyup', function (e) {
+$("#searchProperty").on('keyup', function (e) {
     if (e.key === 'Enter' || e.keyCode === 13) {
-        let search = document.getElementById("searchPlace").value ;
+        let search = document.getElementById("searchProperty").value ;
 
         $(".propertiesList").remove();
 
@@ -497,7 +576,7 @@ $("#searchPlace").on('keyup', function (e) {
         //once everything has been recorded on the tableString, put the ending table tag to complete the element
         propertyTableString += "</table>";
 
-        $(".tableDiv").append(propertyTableString);
+        $(".propertyTableDiv").append(propertyTableString);
     }
 });
 
@@ -602,7 +681,7 @@ $("#filterOwnerSubmit").on("click", function() {
         //once everything has been recorded on the tableString, put the ending table tag to complete the element
         tableString += "</table>";
 
-        $(".tableDiv").append(tableString);
+        $(".propertyTableDiv").append(tableString);
     }
     if(filter == "Workspace") {
         tableString= `<table class="placesList">`;
@@ -649,6 +728,6 @@ $("#filterOwnerSubmit").on("click", function() {
         //once everything has been recorded on the tableString, put the ending table tag to complete the element
         tableString += "</table>";
 
-        $(".tableDiv").append(tableString);
+        $(".propertyTableDiv").append(tableString);
     }
 });
