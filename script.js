@@ -11,49 +11,47 @@ var propertyCount = 0;
 
 var workspaceCount = 0;
 
+var role = "";
+
 var debug = 1 ;
 
 function loadUserNum() {
-    if(sessionStorage.getItem("usersCount")!=0)
-    {
-        usersCount = Number(sessionStorage.getItem("usersCount"));
-        alert(`number of users: ${usersCount}`);
-        placesCount = Number(sessionStorage.getItem("placesCount"));
-        alert(`number of places: ${placesCount}`);
-        currentUser = sessionStorage.getItem("currentUserName");
-        alert(`current user: ${currentUser}`);
-    }
+    // if(sessionStorage.getItem("usersCount")!=0)
+    // {
+    //     usersCount = Number(sessionStorage.getItem("usersCount"));
+    //     alert(`number of users: ${usersCount}`);
+    //     placesCount = Number(sessionStorage.getItem("placesCount"));
+    //     alert(`number of places: ${placesCount}`);
+    //     currentUser = sessionStorage.getItem("currentUserName");
+    //     alert(`current user: ${currentUser}`);
+    // }
     
-    // if(currentUser.getItem("currentUserName")!="") {
-    //     // currentUser = sessionStorage.getItem("currentUserName");
-    //     // alert(`current user: ${currentUser}`);
+    // // if(currentUser.getItem("currentUserName")!="") {
+    // //     // currentUser = sessionStorage.getItem("currentUserName");
+    // //     // alert(`current user: ${currentUser}`);
+    // // }
+
+    // if (sessionStorage['propertyCount']) {
+    //     alert(`property Count:  ${sessionStorage.getItem('propertyCount')}`);
+    //     propertyCount = sessionStorage.getItem('propertyCount');
     // }
 
-    if (sessionStorage['propertyCount']) {
-        alert(`property Count:  ${sessionStorage.getItem('propertyCount')}`);
-        propertyCount = sessionStorage.getItem('propertyCount');
-    }
-
-    if (sessionStorage['workspaceCount']) {
-        alert(`workspace Count:  ${sessionStorage.getItem('workspaceCount')}`);
-        workspaceCount = sessionStorage.getItem('workspaceCount');
-    }
+    // if (sessionStorage['workspaceCount']) {
+    //     alert(`workspace Count:  ${sessionStorage.getItem('workspaceCount')}`);
+    //     workspaceCount = sessionStorage.getItem('workspaceCount');
+    // }
 }
 
 function loadName() {   // to be used on coworker/owner page on properties
-    if (!(sessionStorage['user0'])) {
-        alert("You are not logged in.");
-        location.href = 'index.html';
-    }
-
+    checkIfCoworker();
     // let tempUser = JSON.parse(sessionStorage.getItem(`user${1}`));
-    let tempUser = JSON.parse(sessionStorage.getItem(`user0`));
-    let role = tempUser.role;
+    //let tempUser = JSON.parse(sessionStorage.getItem(`user0`));
+    // let role = tempUser.role;
 
-    if(role != 'Coworker' || role == null) {
-        alert("User is not a Coworker or is not logged in");
-        location.href = 'index.html';
-    }
+    // if(role != 'Coworker' || role == null) {
+    //     alert("User is not a Coworker or is not logged in");
+    //     location.href = 'index.html';
+    // }
 
     loadUserNum() ;
     $('#coWorkerIntro').text(`Hello, ${currentUser}!`);
@@ -63,25 +61,69 @@ function loadName() {   // to be used on coworker/owner page on properties
 }
 
 function loadOwnerName() {
-    if (!(sessionStorage['user0'])) {
-        alert("You are not logged in.");
-        location.href = 'index.html';
-    }
+    checkIfOwner();
 
     // let tempUser = JSON.parse(sessionStorage.getItem(`user${1}`));
-    let tempUser = JSON.parse(sessionStorage.getItem(`user0`));
-    let role = tempUser.role;
-
-    if(role != 'Owner' || role == null) {
-        alert("User is not a Owner or is not logged in");
-        location.href = 'index.html';
-    }
+    // let tempUser = JSON.parse(sessionStorage.getItem(`user0`));
+    // let role = tempUser.role;
 
     loadUserNum() ;
     $('#ownerIntro').text(`Hello, ${currentUser}!`);
 
     createOwnerTable();
     $(".tableDiv").append(tableString);
+}
+
+function checkIfCoworker() {
+    if (!(sessionStorage['currentUserName'])) {
+        alert("You are not logged in.");
+        location.href = 'index.html';
+    }
+
+    usersCount = sessionStorage.getItem('usersCount');
+
+    currentUser = sessionStorage.getItem('currentUserName');
+
+    for(var i = 0; i < usersCount; i++) {
+        let tempUser = JSON.parse(sessionStorage.getItem(`user${i}`));
+
+        if (currentUser == tempUser.name) {
+            let role = tempUser.role;
+
+            if(role != 'Coworker' || role == null) {
+                alert("User is not a Coworker or is not logged in");
+                location.href = 'index.html';
+            }
+
+            break;
+        }
+    }
+}
+
+function checkIfOwner() {
+    if (!(sessionStorage['user0'])) {
+        alert("You are not logged in.");
+        location.href = 'index.html';
+    }
+
+    usersCount = sessionStorage.getItem('usersCount');
+
+    currentUser = sessionStorage.getItem('currentUserName');
+
+    for(var i = 0; i < usersCount; i++) {
+        let tempUser = JSON.parse(sessionStorage.getItem(`user${i}`));
+
+        if (currentUser == tempUser.name) {
+            let role = tempUser.role;
+
+            if(role != 'Owner' || role == null) {
+                alert("User is not a Owner or is not logged in");
+                location.href = 'index.html';
+            }
+            
+            break;
+        }
+    }
 }
 
 //===========================================================================
