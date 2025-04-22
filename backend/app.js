@@ -2,12 +2,106 @@
 
 const { MongoClient, ObjectId } = require('mongodb'); 
 
+const express = require("express");
+const cors = require("cors");
+const { json } = require("stream/consumers");
+const mongoose = require('mongoose');
+
+const PORT = 3000;
+
 // --env-file=.env app.js
 const username = process.env.USER ;
 const password = process.env.PASSWORD ;
 const database = "WebsiteData"; 
 
 const uri = `mongodb+srv://${username}:${password}@websitedatabase.6oze7.mongodb.net/`
+
+mongoose.connect(uri)
+    .then(() => console.log('MongoDB is Connected!'))
+    .catch(err => console.log(err));
+
+const app = express();
+
+//start the server
+app.listen(PORT, 
+    () => console.log(`Server is running port ${PORT}`));
+
+app.use(express.json()); 
+app.use(cors()); 
+
+app.get("/test", (req, res) => {
+    res.send("Hello from Test API");
+})
+
+app.get("/", (req, res) => {
+    res.send("Hello from API");
+})
+
+//execute the function that houses all of the queries
+// runQueries();
+
+app.get("/readUsersData",  async (req, res) => { 
+    const client = new MongoClient(uri);
+    await client.connect().then(console.log(`\nLogged in as ${username}`));
+
+    // let collection = await client.db.collection("users");
+    // let results = await collection.find({})
+    //   .limit(50)
+    //   .toArray();
+    // res.send(results).status(200);
+
+    const response = await client
+    .db(database)       
+    .collection("users") 
+    .findOne();        
+    console.log(response);
+
+    await client.close()
+            .then(console.log(`${username} - Connection closed`));
+    // res.send(results).status(200);
+});
+
+app.get("/readPropertiesData",  async (req, res) => { 
+    const client = new MongoClient(uri);
+    await client.connect().then(console.log(`\nLogged in as ${username}`));
+
+    // let collection = await client.db.collection("users");
+    // let results = await collection.find({})
+    //   .limit(50)
+    //   .toArray();
+    // res.send(results).status(200);
+
+    const response = await client
+    .db(database)       
+    .collection("properties") 
+    .find();        
+    console.log(response);
+
+    await client.close()
+            .then(console.log(`${username} - Connection closed`));
+    // res.send(results).status(200);
+});
+
+app.get("/readWorkspacesData",  async (req, res) => { 
+    const client = new MongoClient(uri);
+    await client.connect().then(console.log(`\nLogged in as ${username}`));
+
+    // let collection = await client.db.collection("users");
+    // let results = await collection.find({})
+    //   .limit(50)
+    //   .toArray();
+    // res.send(results).status(200);
+
+    const response = await client
+    .db(database)       
+    .collection("workspaces") 
+    .find();        
+    console.log(response);
+
+    await client.close()
+            .then(console.log(`${username} - Connection closed`));
+    // res.send(results).status(200);
+});
 
 async function runQueries() {
 
@@ -17,7 +111,7 @@ async function runQueries() {
         //making sure that i'm connected to the database
         await client.connect().then(console.log(`\nLogged in as ${username}`));
         
-        // await addNewUser(client);
+        await addNewUser(client);
 
         // await addNewWorkspace(client);
 
@@ -31,9 +125,9 @@ async function runQueries() {
 
         // await deleteWorkspace(client);
 
-        await deleteUser(client);
+        // await deleteUser(client);
 
-        // await showUsers(client);
+        await showUsers(client);
 
         // await showAllProperties(client);
 
@@ -48,8 +142,6 @@ async function runQueries() {
     }
 }
 
-//execute the function that houses all of the queries
-runQueries();
 
 //will be changed when frontend is connected to backend
 async function addNewUser(client) {
@@ -174,7 +266,7 @@ async function showUsers(client) {
     const response = await client
     .db(database)       
     .collection("users") 
-    .findOne();        
+    .find();        
     console.log(response);
 }
 

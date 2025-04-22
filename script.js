@@ -19,6 +19,8 @@ var role = "";
 
 var debug = 1 ;
 
+
+
 function loadUserNum() {
     // if(sessionStorage.getItem("usersCount")!=0)
     // {
