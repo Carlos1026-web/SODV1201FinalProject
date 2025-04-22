@@ -56,6 +56,7 @@ app.get("/readUsersData",  async (req, res) => {
     .findOne();        
     console.log(response);
 
+    res.send(response).status(200);
     await client.close()
             .then(console.log(`${username} - Connection closed`));
     // res.send(results).status(200);
